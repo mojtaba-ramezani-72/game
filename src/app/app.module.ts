@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CanActivateTeam } from './app.guard';
 import { QuestionComponent } from './components/question/question.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/auth/register-page/register-page.component';
@@ -24,7 +25,7 @@ import { GamePageComponent } from './pages/game-page/game-page.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [CanActivateTeam],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
