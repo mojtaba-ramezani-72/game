@@ -46,12 +46,16 @@ export class GamePageComponent implements OnInit {
 
 	next(): void {
 		if (this.checkState()) {
-      // this.getCorrectAnswer(this.currentQuestion.id);
-			this.carousel.next();
-
-			this.currentIndex++;
-
-			this.currentQuestion = this.data[this.currentIndex];
+      // console.log("this.data[this.currentIndex]");
+      // console.log(this.data);
+      // console.log(this.data[this.currentIndex]);
+      // const thisAnswer = this.data[this.currentIndex].answers;
+      this.getCorrectAnswer(this.currentQuestion.id);
+			// this.carousel.next();
+      //
+			// this.currentIndex++;
+      //
+			// this.currentQuestion = this.data[this.currentIndex];
 		}
 	}
 
