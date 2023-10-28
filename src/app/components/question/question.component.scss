@@ -1,0 +1,12 @@
+:host {
+	.question-box {
+		position: relative;
+		min-height: 300px;
+		width: 80%;
+		border-radius: 30px;
+
+		.question {
+			background-color: #f1f5f7;
+		}
+	}
+}

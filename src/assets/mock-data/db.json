@@ -1,23 +1,49 @@
 {
-  "questions": [
-    {
-      "id": "1",
-      "questionTitle": "questionTitle 1",
-      "answer": "answer 1",
-      "score": 20
-    },
-    {
-      "id": "2",
-      "questionTitle": "questionTitle 2",
-      "answer": "answer 2",
-      "score": 20
-    },
-    {
-      "id": "3",
-      "questionTitle": "questionTitle 3",
-      "answer": "answer 3",
-      "score": 20
-    }
-  ],
-  "users": []
+	"questions": [
+		{
+			"id": 1,
+			"questionTitle": "questionTitle 1",
+			"answer": {
+				"minAnswer": 1,
+				"maxAnswer": 1,
+				"items": [
+					{ "id": 1, "title": "answer1" },
+					{ "id": 2, "title": "answer2" },
+					{ "id": 3, "title": "answer3" },
+					{ "id": 4, "title": "answer4" }
+				]
+			},
+			"score": 20
+		},
+		{
+			"id": 2,
+			"questionTitle": "questionTitle 2",
+			"answer": {
+				"minAnswer": 2,
+				"maxAnswer": 3,
+				"items": [
+					{ "id": 1, "title": "answer1" },
+					{ "id": 2, "title": "answer2" },
+					{ "id": 3, "title": "answer3" },
+					{ "id": 4, "title": "answer4" }
+				]
+			},
+			"score": 20
+		},
+		{
+			"id": 3,
+			"questionTitle": "questionTitle 3",
+			"answer": {
+				"minAnswer": 3,
+				"maxAnswer": 3,
+				"items": [
+					{ "id": 1, "title": "answer1" },
+					{ "id": 2, "title": "answer2" },
+					{ "id": 3, "title": "answer3" },
+					{ "id": 4, "title": "answer4" }
+				]
+			},
+			"score": 20
+		}
+	]
 }
