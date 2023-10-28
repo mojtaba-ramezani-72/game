@@ -20,6 +20,8 @@ export class GamePageComponent implements OnInit {
 		return this._carousel;
 	}
 
+  isGameStarted = false;
+
 	data: Question[] = [];
 
 	currentIndex: number = 0;
@@ -105,4 +107,8 @@ export class GamePageComponent implements OnInit {
 	private clearMessage(): void {
 		this.message = null;
 	}
+
+  public start(): void {
+    this.isGameStarted = true;
+  }
 }

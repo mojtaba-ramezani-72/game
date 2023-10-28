@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'game-page', loadChildren: async () => (await import('./pages/auth/register-page/register-page.module')).RegisterModule },
+  { path: 'game-page', loadChildren: async () => (await import('./pages/game-page/game-page.module')).GameModule },
   { path: 'register-page', loadChildren: async () => (await import('./pages/auth/register-page/register-page.module')).RegisterModule },
 	{ path: 'login-page', loadChildren: async () => (await import('./pages/auth/login-page/login-page.module')).LoginModule },
   { path: '', redirectTo: 'login-page', pathMatch: 'full' },

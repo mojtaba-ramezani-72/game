@@ -13,12 +13,7 @@ export class QuestionComponent implements OnInit {
 
 	result: number[] = [];
 
-	timer: number = 60;
-	timerInterval: any;
-
 	ngOnInit(): void {
-		this.startTimer();
-
 		if (this.question.answers?.length) this.result = this.question.answers;
 	}
 
@@ -38,17 +33,4 @@ export class QuestionComponent implements OnInit {
 		this.onAnswerSelect.emit({ questionId: this.question.id, answers: this.result, clickedStatus });
 	}
 
-	private startTimer(): void {
-		this.timerInterval = setInterval(() => {
-			if (this.timer > 0) {
-				this.timer -= 1;
-			} else {
-				clearInterval(this.timerInterval);
-			}
-		}, 1000);
-	}
-
-  getTimeRemainingPercent(): string {
-    return `width: ${(60 - this.timer) * 1.67}%`;
-  }
 }

@@ -1,7 +1,24 @@
 <section class="vh-100 text-bg-info">
   <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-xl-9">
+
+      <div class="col-xl-9" *ngIf='!isGameStarted'>
+
+        <h1 class="text-white mb-4">Are you ready to start?</h1>
+
+        <div class="card rounded-4">
+          <div class="card-body p-0">
+
+            <div class="p-4 text-center">
+              <button type="submit" class="btn btn-primary btn-md" data-test="start-btn" (click)="start()">Yes, let's get started!</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-9" *ngIf='isGameStarted'>
 
         <h1 class="text-white mb-4">Answer the questions</h1>
 
