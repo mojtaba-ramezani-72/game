@@ -21,5 +21,12 @@ export interface AnswerItem {
 export interface QuestionResult {
 	questionId: number;
 	answers: number[];
-	valid: boolean;
+  clickedStatus: 'clicked' | 'unClicked' | string;
+	// valid: boolean;
 }
+
+export interface _Answer {
+  questionId: number;
+  correctAnswersId: number[];
+}
+

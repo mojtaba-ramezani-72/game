@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { Question } from './model/question.model';
+import { _Answer, Question } from '../..//model/question.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AppService {
+export class QuestionService {
   private baseUrl = 'http://localhost:8000/questions';
 
   constructor(private http: HttpClient) {}
@@ -17,6 +17,10 @@ export class AppService {
 
   get(id: string): Observable<Question> {
     return this.http.get<any>(this.baseUrl + '/' + id);
+  }
+
+  getCorrectAnswer(questionId: number): Observable<_Answer> {
+    return this.http.get<any>('http://localhost:8000/answers?questionId='+ questionId);
   }
 
   create(question: Question) {

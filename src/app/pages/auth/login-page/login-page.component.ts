@@ -17,18 +17,14 @@ export class LoginPageComponent {
   });
 
   onSubmit() {
-    this.authService.login().subscribe({
+    const { email, password } = this.loginForm.value;
+    this.authService.login({ email, password }).subscribe({
       complete: () => {},
       error: () => {
         alert('something was wrong');
       },
-      next: (res) => {
-        const user = res.find((a: any) => {
-          const { email, password } = this.loginForm.value;
-          return a.email === email && a.password === password;
-        });
-
-        if (user) {
+      next: (user: any) => {
+        if (user && user.length) {
           alert("you are successfully login :)")
         } else {
           alert("user Not Found")

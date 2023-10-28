@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AppService } from 'src/app/app.service';
+import { QuestionService } from './question.service';
 import { Question, QuestionResult } from 'src/app/model/question.model';
 
 declare const bootstrap: any;
@@ -27,21 +27,24 @@ export class GamePageComponent implements OnInit {
 
 	message: string;
 
-	constructor(private appService: AppService) {}
+	constructor(private questionService: QuestionService) {}
 
 	ngOnInit() {
 		this.getData();
 	}
 
 	onAnswerSelect(result: QuestionResult): void {
-		if (result.valid) {
+		if (result.clickedStatus === 'clicked') {
 			this.data[this.currentIndex].answers = result.answers;
+      this.currentQuestion._valid = true;
 		}
-		this.currentQuestion._valid = result.valid;
+		// this.currentQuestion._valid = result.valid;
+		// this.currentQuestion._valid = result.valid;
 	}
 
 	next(): void {
 		if (this.checkState()) {
+      // this.getCorrectAnswer(this.currentQuestion.id);
 			this.carousel.next();
 
 			this.currentIndex++;
@@ -61,7 +64,7 @@ export class GamePageComponent implements OnInit {
 	}
 
 	private checkState(): boolean {
-		this.clearMesasge();
+		this.clearMessage();
 
 		if (!this.currentQuestion?._valid) {
 			this.setMessage(`At least select ${this.currentQuestion.answer.minAnswer}`);
@@ -72,18 +75,34 @@ export class GamePageComponent implements OnInit {
 	}
 
 	private getData(): void {
-		this.appService.getAll().subscribe((data) => {
-			this.data = data;
-
-			this.currentQuestion = this.data[this.currentIndex];
+		this.questionService.getAll().subscribe({
+      complete: () => {},
+      error: () => {
+        alert('something was wrong');
+      },
+      next: (res) => {
+        this.data = res;
+        this.currentQuestion = this.data[this.currentIndex];
+      }
 		});
 	}
+
+  private getCorrectAnswer(questionId: number): void {
+    this.questionService.getCorrectAnswer(questionId).subscribe({
+      complete: () => {},
+      error: () => {
+        alert('something was wrong');
+      },
+      next: (res) => {
+      }
+    });
+  }
 
 	private setMessage(message: string): void {
 		this.message = message;
 	}
 
-	private clearMesasge(): void {
+	private clearMessage(): void {
 		this.message = null;
 	}
 }

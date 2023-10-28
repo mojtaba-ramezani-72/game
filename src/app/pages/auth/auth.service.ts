@@ -15,8 +15,8 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl, user);
   }
 
-  login(): Observable<Array<Login>> {
-    return this.http.get<any>(this.baseUrl);
+  login({ email, password }: Login): Observable<Login> {
+    return this.http.get<any>(`${this.baseUrl}?password=${password}&email=${email}`);
   }
 
 }

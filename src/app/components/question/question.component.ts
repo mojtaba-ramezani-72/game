@@ -24,15 +24,18 @@ export class QuestionComponent implements OnInit {
 
 	setResult(id: number): void {
 		const index: number = this.result.findIndex((val) => val === id);
+    let clickedStatus;
 		if (index < 0) {
-			if (this.result.length < this.question.answer.maxAnswer) this.result.push(id);
+      clickedStatus = 'clicked';
+			// if (this.result.length < this.question.answer.maxAnswer) this.result.push(id);
+			this.result.push(id);
 		} else {
-			this.result.splice(index, 1);
+      clickedStatus = 'unClicked';
+      this.result.splice(index, 1);
 		}
-
-		const valid: boolean = this.result.length >= this.question.answer.minAnswer && this.result.length <= this.question.answer.maxAnswer;
-
-		this.onAnswerSelect.emit({ questionId: this.question.id, answers: this.result, valid });
+		// const valid: boolean = this.result.length >= this.question.answer.minAnswer && this.result.length <= this.question.answer.maxAnswer;
+		// this.onAnswerSelect.emit({ questionId: this.question.id, answers: this.result, valid });
+		this.onAnswerSelect.emit({ questionId: this.question.id, answers: this.result, clickedStatus });
 	}
 
 	private startTimer(): void {
@@ -44,4 +47,8 @@ export class QuestionComponent implements OnInit {
 			}
 		}, 1000);
 	}
+
+  getTimeRemainingPercent(): string {
+    return `width: ${(60 - this.timer) * 1.67}%`;
+  }
 }
