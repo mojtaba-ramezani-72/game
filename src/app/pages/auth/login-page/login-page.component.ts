@@ -19,7 +19,7 @@ export class LoginPageComponent {
 
 	onSubmit() {
     const { email, password } = this.loginForm.value;
-    this.authService.login().subscribe({
+    this.authService.login({ email, password }).subscribe({
 			complete: () => {},
 			error: () => {
 				alert('something was wrong');
