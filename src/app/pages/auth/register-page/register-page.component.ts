@@ -17,10 +17,15 @@ export class RegisterPageComponent {
   });
 
   onSubmit() {
-    console.log(this.registerForm.value)
-    this.authService.register(this.registerForm.value).subscribe((data) => {
-      console.log("done!")
-      console.log(data)
+    this.authService.register(this.registerForm.value).subscribe({
+      complete: () => {},
+      error: () => {
+        alert('something was wrong');
+      },
+      next: (res) => {
+        alert("you are successfully register :)")
+        console.log(res)
+      },
     });
   }
 }
