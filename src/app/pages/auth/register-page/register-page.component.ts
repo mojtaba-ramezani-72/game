@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -7,12 +8,19 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./register-page.component.scss']
 })
 export class RegisterPageComponent {
-  registerForm = new FormGroup({
+
+  constructor(private authService: AuthService) {}
+
+  registerForm: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
   });
 
   onSubmit() {
     console.log(this.registerForm.value)
+    this.authService.register(this.registerForm.value).subscribe((data) => {
+      console.log("done!")
+      console.log(data)
+    });
   }
 }

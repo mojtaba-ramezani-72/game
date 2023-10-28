@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { RegisterPageComponent } from './pages/auth/register-page/register-page.component';
 
 @NgModule({
   declarations: [
