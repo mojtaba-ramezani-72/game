@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="col-md-9 pe-5">
-                  <input type="email" class="form-control form-control-lg" placeholder="please enter email" formControlName="email"/>
+                  <input type="email" class="form-control form-control-lg" data-test="email" placeholder="please enter email" formControlName="email"/>
                 </div>
 
               </div>
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-md-9 pe-5">
-                  <input type="password" class="form-control form-control-lg" placeholder="please enter password" formControlName="password"/>
+                  <input type="password" class="form-control form-control-lg" data-test="password" placeholder="please enter password" formControlName="password"/>
                 </div>
 
               </div>
@@ -37,7 +37,7 @@
               <hr class="mx-n3">
 
               <div class="px-4 py-4">
-                <button type="submit" class="btn btn-primary btn-lg" (click)="onSubmit()">Login</button>
+                <button type="submit" class="btn btn-primary btn-lg" data-test="login-btn" (click)="onSubmit()">Login</button>
               </div>
             </form>
 
