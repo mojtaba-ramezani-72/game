@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanActivateTeam } from '../../../app.guard';
-import { LoginPageComponent } from './login-page.component';
-import { LoginRoutingModule } from "./login-routing.module";
+import { RegisterComponent } from './register.component';
+import { RegisterRoutingModule } from "./register-routing.module";
 
 @NgModule({
   declarations: [
-    LoginPageComponent
+    RegisterComponent
   ],
   imports: [
-    LoginRoutingModule,
+    RegisterRoutingModule,
     FormsModule,
     ReactiveFormsModule
   ],
   providers: [CanActivateTeam],
 })
-
-export class LoginModule { }
+export class RegisterModule { }

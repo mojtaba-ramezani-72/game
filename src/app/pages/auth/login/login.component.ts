@@ -5,11 +5,11 @@ import { StorageService } from '../../../services/storage.service';
 import { AuthService } from '../auth.service';
 
 @Component({
-	selector: 'app-login-page',
-	templateUrl: './login-page.component.html',
-	styleUrls: ['./login-page.component.scss'],
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.scss'],
 })
-export class LoginPageComponent {
+export class LoginComponent {
 	constructor(private router: Router, private authService: AuthService, private storageService: StorageService) {}
 
 	loginForm: FormGroup = new FormGroup({

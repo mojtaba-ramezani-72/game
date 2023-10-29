@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { _Answer, Question } from '../..//model/question.model';
+import { QuestionSheet } from '../..//model/question.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +11,30 @@ export class QuestionService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Question[]> {
+  getAll(): Observable<QuestionSheet[]> {
     return this.http.get<any>(this.baseUrl);
   }
 
-  get(id: string): Observable<Question> {
+  get(id: string): Observable<QuestionSheet> {
     return this.http.get<any>(this.baseUrl + '/' + id);
   }
 
-  getCorrectAnswer(questionId: number): Observable<_Answer> {
-    return this.http.get<any>('http://localhost:8000/answers?questionId='+ questionId);
+  public getCorrectAnswer<T, U>(questionId: number): Promise<U> {
+    return new Promise<U>((resolve, reject) => {
+      this.http.get<U>('http://localhost:8000/answers?questionId='+ questionId)
+        .subscribe({
+          next: (v: any) => resolve(v[0]),
+          error: (e: any) => reject(e),
+          complete: () => {},
+        });
+    });
   }
 
-  create(question: Question) {
+  create(question: QuestionSheet) {
     return this.http.post<any>(this.baseUrl, question);
   }
 
-  update(id: string, question: Question): Observable<Question> {
+  update(id: string, question: QuestionSheet): Observable<QuestionSheet> {
     return this.http.put<any>(this.baseUrl + '/' + id, question);
   }
 

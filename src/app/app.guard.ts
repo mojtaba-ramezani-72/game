@@ -15,7 +15,7 @@ export class CanActivateTeam implements CanActivate {
 			const token = this.storageService.getItem('token');
 
 			if (!token) {
-				this.router.navigate(['login-page']);
+				this.router.navigate(['login']);
 			}
 
 			observer.next(true);

@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
-	selector: 'app-register-page',
-	templateUrl: './register-page.component.html',
-	styleUrls: ['./register-page.component.scss'],
+	selector: 'app-register',
+	templateUrl: './register.component.html',
+	styleUrls: ['./register.component.scss'],
 })
-export class RegisterPageComponent {
+export class RegisterComponent {
 	constructor(private router: Router, private authService: AuthService) {}
 
 	registerForm: FormGroup = new FormGroup({
@@ -23,7 +23,7 @@ export class RegisterPageComponent {
 				alert('something was wrong');
 			},
 			next: (res) => {
-				this.router.navigate(['login-page']);
+				this.router.navigate(['login']);
 			},
 		});
 	}

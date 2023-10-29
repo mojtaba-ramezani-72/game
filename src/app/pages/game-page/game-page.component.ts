@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { QuestionService } from './question.service';
-import { Question, QuestionResult } from 'src/app/model/question.model';
+import { Answer, QuestionSheet } from 'src/app/model/question.model';
 
 declare const bootstrap: any;
 @Component({
@@ -14,20 +14,18 @@ export class GamePageComponent implements OnInit {
 	private _carousel: any = null;
 	private get carousel(): any {
 		if (this._carousel) return this._carousel;
-
 		this._carousel = new bootstrap.Carousel(this.carouselElm.nativeElement);
-
 		return this._carousel;
 	}
 
   isGameStarted = false;
 
-	data: Question[] = [];
+  questionSheet: QuestionSheet[] = [];
 
-	currentIndex: number = 0;
-	currentQuestion: Question;
-
+	currentQuestion: QuestionSheet;
+  currentIndex: number = 0;
 	message: string;
+  achievedScore = 0;
 
 	constructor(private questionService: QuestionService) {}
 
@@ -35,49 +33,74 @@ export class GamePageComponent implements OnInit {
 		this.getData();
 	}
 
-	onAnswerSelect(result: QuestionResult): void {
-		if (result.clickedStatus === 'clicked') {
-			this.data[this.currentIndex].answers = result.answers;
-      this.currentQuestion._valid = true;
-		}
-		// this.currentQuestion._valid = result.valid;
-		// this.currentQuestion._valid = result.valid;
-	}
+	async next() {
+		if (this.isAllowedToNext()) {
+      this.currentQuestion.loading = true;
+      await this.getCorrectAnswer(this.currentQuestion.id);
+      this.currentQuestion.loading = false;
+      this.disabledAllAnswers(this.currentQuestion.id);
 
-	next(): void {
-		if (this.checkState()) {
-      // console.log("this.data[this.currentIndex]");
-      // console.log(this.data);
-      // console.log(this.data[this.currentIndex]);
-      // const thisAnswer = this.data[this.currentIndex].answers;
-      this.getCorrectAnswer(this.currentQuestion.id);
-			// this.carousel.next();
-      //
-			// this.currentIndex++;
-      //
-			// this.currentQuestion = this.data[this.currentIndex];
+      const goNext = () => {
+        this.carousel.next();
+        this.currentIndex++;
+        this.setCurrentQuestion();
+      }
+
+      if (!this.currentQuestion.isSeen) {
+        this.startTimer();
+        setTimeout(() => {
+          goNext();
+        }, this.seconds * 1000)
+      } else {
+        goNext();
+      }
+
 		}
 	}
 
 	prev(): void {
-		if (this.checkState()) {
-			this.carousel.prev();
-
-			this.currentIndex--;
-
-			this.currentQuestion = this.data[this.currentIndex];
-		}
+    this.getPreviousQuestion().isSeen = true;
+    this.carousel.prev();
+    this.currentIndex--;
+    this.setCurrentQuestion();
 	}
 
-	private checkState(): boolean {
+  getPreviousQuestion(): QuestionSheet {
+    return this.questionSheet[this.currentIndex - 1];
+  }
+
+  disabledAllAnswers(questionId: number): void {
+    const thisQuestion = this.questionSheet.find(question => question.id === questionId);
+    const answers = thisQuestion.answers;
+
+    for (let i = 0; i < answers.length; i++) {
+      answers[i].disabled = true;
+    }
+
+  }
+
+	private isAllowedToNext(): boolean {
 		this.clearMessage();
 
-		if (!this.currentQuestion?._valid) {
-			this.setMessage(`At least select ${this.currentQuestion.answer.minAnswer}`);
+    const thisQuestion = this.questionSheet.find(question => question.id === this.currentQuestion.id);
 
-			return false;
-		}
-		return true;
+    const hasAtLeastOneClicked = (question: QuestionSheet) => {
+      let clicked = false;
+      for (let i = 0; i < question.answers.length; i++) {
+        if (question.answers[i].state === 'clicked') {
+          clicked = true;
+          break;
+        }
+      }
+      return clicked;
+    };
+
+    if (!hasAtLeastOneClicked(thisQuestion)) {
+      this.setMessage(`At least select 1 answer`);
+      return false;
+    }
+    return true;
+
 	}
 
 	private getData(): void {
@@ -86,22 +109,46 @@ export class GamePageComponent implements OnInit {
       error: () => {
         alert('something was wrong');
       },
-      next: (res) => {
-        this.data = res;
-        this.currentQuestion = this.data[this.currentIndex];
+      next: (res: any) => {
+        this.questionSheet = res;
+        this.setCurrentQuestion();
       }
 		});
 	}
 
-  private getCorrectAnswer(questionId: number): void {
-    this.questionService.getCorrectAnswer(questionId).subscribe({
-      complete: () => {},
-      error: () => {
-        alert('something was wrong');
-      },
-      next: (res) => {
+  setCurrentQuestion(): void {
+    if (this.currentIndex < this.questionSheet.length) {
+      this.currentQuestion = this.questionSheet[this.currentIndex];
+    } else if (this.currentIndex === this.questionSheet.length) {
+      this.finishGame();
+    }
+  }
+
+  finishGame() {
+    alert("finishGame!!")
+  }
+
+  private async getCorrectAnswer(questionId: number) {
+    const response: Answer = await this.questionService.getCorrectAnswer(questionId);
+    const thisQuestion = this.questionSheet.find(question => question.id === questionId);
+    const answers = thisQuestion.answers;
+    const correctAnswersId = response.correctAnswersId;
+
+    for (let i = 0; i < answers.length; i++) {
+      if (correctAnswersId.includes(answers[i].id)) {
+        answers[i].serverState = 'correct';
+        if (answers[i].state === 'clicked') {
+          this.achievedScore += thisQuestion.score / correctAnswersId.length;
+        }
+      } else {
+        if (answers[i].state === 'clicked') {
+          if (this.currentIndex !== 0) {
+            this.achievedScore = this.achievedScore - (this.achievedScore / this.currentIndex);
+          }
+        }
+        answers[i].serverState = 'inCorrect';
       }
-    });
+    }
   }
 
 	private setMessage(message: string): void {
@@ -112,7 +159,25 @@ export class GamePageComponent implements OnInit {
 		this.message = null;
 	}
 
-  public start(): void {
+  public startGame(): void {
     this.isGameStarted = true;
   }
+
+  seconds = 3;
+  timer: number;
+  private startTimer(): void {
+    this.timer = this.seconds;
+    const timerInterval = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer -= 1;
+      } else {
+        clearInterval(timerInterval);
+      }
+    }, 1000);
+  }
+
+  getTimeRemainingPercent(): string {
+    return `width: ${(this.seconds - this.timer) * 34}%`;
+  }
+
 }
