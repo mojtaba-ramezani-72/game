@@ -1,6 +1,6 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-test('test login', async ({ page }) => {
+test('test login successfully', async ({ page }) => {
   await page.goto('http://localhost:4200/login');
   await page.locator('[data-test="email"]').click();
   await page.locator('[data-test="email"]').fill('player@gmail.com');
@@ -11,4 +11,6 @@ test('test login', async ({ page }) => {
     dialog.dismiss().catch(() => {});
   });
   await page.locator('[data-test="login-btn"]').click();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(new RegExp('^http://localhost:4200/game-page'));
 });

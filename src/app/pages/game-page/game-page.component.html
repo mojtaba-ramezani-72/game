@@ -59,7 +59,7 @@
               </div>
 
               <div class="d-flex flex-row justify-content-center mb-3">
-                <span class="d-block text-danger" *ngIf="message">{{ message }}</span>
+                <span class="d-block text-danger" data-testid="atLeastOneAnswerMessage" *ngIf="message">{{ message }}</span>
               </div>
 
               <h6 class="d-block text-center invisible-progress" [ngClass]="{'visible-progress': timer > 0}">preparing next question...</h6>
