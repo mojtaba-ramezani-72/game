@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: 'register', loadChildren: async () => (await import('./pages/auth/register/register.module')).RegisterModule },
 	{ path: 'login', loadChildren: async () => (await import('./pages/auth/login/login.module')).LoginModule },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({
