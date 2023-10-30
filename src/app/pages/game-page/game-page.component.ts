@@ -13,12 +13,12 @@ export class GamePageComponent implements OnInit {
 
 	private _carousel: any = null;
 	private get carousel(): any {
-		if (this._carousel) return this._carousel;
 		this._carousel = new bootstrap.Carousel(this.carouselElm.nativeElement);
 		return this._carousel;
 	}
 
   isGameStarted = false;
+  isGameFinished = false;
 
   questionSheet: QuestionSheet[] = [];
 
@@ -125,7 +125,13 @@ export class GamePageComponent implements OnInit {
   }
 
   finishGame() {
-    alert("finishGame!!")
+    this.isGameFinished = true;
+    this.resetVariables();
+  }
+
+  resetVariables() {
+    this.currentIndex = 0;
+    this.achievedScore = 0;
   }
 
   private async getCorrectAnswer(questionId: number) {
@@ -161,6 +167,13 @@ export class GamePageComponent implements OnInit {
 
   public startGame(): void {
     this.isGameStarted = true;
+    this.isGameFinished = false;
+  }
+
+  public startGameAgain(): void {
+    this.getData();
+    this.isGameStarted = true;
+    this.isGameFinished = false;
   }
 
   seconds = 3;
